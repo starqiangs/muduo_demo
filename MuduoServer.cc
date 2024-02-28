@@ -9,8 +9,10 @@ class MuduoServer
 public:
     MuduoServer(muduo::net::EventLoop *loop, const muduo::net::InetAddress &listenAddr) : server_(loop, listenAddr, "MuduoServer")
     {
+        std::cout << "Client connecting to: " << listenAddr.toIpPort();
         server_.setConnectionCallback(std::bind(&MuduoServer::onConnection, this, std::placeholders::_1));
         server_.setMessageCallback(std::bind(&MuduoServer::onMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        server_.setThreadNum(4);
     }
 
     void start()
@@ -35,9 +37,8 @@ private:
 
     void onMessage(const muduo::net::TcpConnectionPtr &conn, muduo::net::Buffer *buf, muduo::Timestamp time)
     {
-        std::string msg(buf->retrieveAllAsString());
-        std::cout << "Received " << msg.size() << " bytes from " << conn->peerAddress().toIpPort() << std::endl;
-        conn->send(msg);
+        std::string msg = buf->retrieveAllAsString();
+        std::cout << "receive message: " << msg << std::endl;
     }
 };
 

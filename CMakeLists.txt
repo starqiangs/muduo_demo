@@ -9,7 +9,12 @@ set(MUDUO_PATH "/usr/local/muduo")
 
 include_directories(${MUDUO_PATH})
 
-# Echo 服务器
+# server 服务器
 add_executable(MuduoServer MuduoServer.cc)
 target_link_libraries(MuduoServer /usr/local/lib/libmuduo_net.a
+                                  /usr/local/lib/libmuduo_base.a pthread)
+
+# client 客户端
+add_executable(MuduoClient MuduoClient.cc)
+target_link_libraries(MuduoClient /usr/local/lib/libmuduo_net.a
                                   /usr/local/lib/libmuduo_base.a pthread)
